@@ -15,7 +15,7 @@ logger.setLevel(logging.DEBUG)
 
 mydb = mysql.connector.connect(
     host = os.environ.get('MYSQLHOST'),
-    port = os.environ.get('MYSQLPORT'),
+    port = 5655,
     user = os.environ.get('MYSQLUSER'),
     password = os.environ.get('MYSQLPASSWORD'),
     database = os.environ.get('MYSQLDATABASE')
