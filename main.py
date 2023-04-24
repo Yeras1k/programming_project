@@ -59,9 +59,12 @@ def check(message):
             msg = bot.send_message(message.chat.id, 'Введите пароль')
             bot.register_next_step_handler(msg, check_pass)
         elif int(dbresult[0]) == message.chat.id:
+            global student_name
+            mycursor.execute(f"SELECT name FROM students WHERE email = %s",(semail,))
+            student_name = mycursor.fetchone()
             service = telebot.types.ReplyKeyboardMarkup(True, False)
             service.row('Мои результаты', 'Расписание')
-            msg = bot.send_message(message.chat.id, 'Успешно вошли', reply_markup = service)
+            msg = bot.send_message(message.chat.id, f'{student_name}, вы спешно вошли', reply_markup = service)
             bot.register_next_step_handler(msg, student_main)
         else:
             bot.send_message(message.chat.id, 'В доступе отказано')
@@ -74,11 +77,14 @@ def check_pass(message):
     mycursor.execute(f"SELECT password FROM students WHERE email = %s",(semail,))
     result = mycursor.fetchone()
     if message.text == result[0]:
+        global student_name
+        mycursor.execute(f"SELECT name FROM students WHERE email = %s",(semail,))
+        student_name = mycursor.fetchone()
         mycursor.execute(f"UPDATE students SET teleid = {message.chat.id} WHERE email = %s",(semail,))
         mydb.commit()
         service = telebot.types.ReplyKeyboardMarkup(True, False)
         service.row('Мои результаты', 'Расписание')
-        msg = bot.send_message(message.chat.id, 'Успешно вошли', reply_markup = service)
+        msg = bot.send_message(message.chat.id, f'{student_name}, вы спешно вошли', reply_markup = service)
         bot.register_next_step_handler(msg, student_main)
     else:
         bot.send_message(message.chat.id, 'Не правильный пароль')
