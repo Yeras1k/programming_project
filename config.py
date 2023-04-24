@@ -1,5 +1,5 @@
 import os
 
-BOT_TOKEN = "6060217634:AAEvJPeMhnF2pCTRqo7qMddVl837fC8ITso"
+BOT_TOKEN = os.environ.get('BOT_TOKEN')
 APP_URL = os.environ.get('APP_URL') + BOT_TOKEN
 DB_URI = os.environ.get('DB_URI')
