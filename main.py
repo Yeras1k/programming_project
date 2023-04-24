@@ -100,7 +100,7 @@ def student_main(message):
         bot.send_photo(message.chat.id, photo=open(img, 'rb'))
         student_main(message)
     if message.text == 'Мои результаты':
-        mycursor.execute(f"SELECT score FROM students WHERE teleid = %s",(message.chat.id,))
+        mycursor.execute(f"SELECT score FROM results WHERE teleid = %s",(message.chat.id,))
         result = mycursor.fetchone()
         bot.send_photo(message.chat.id, f"Вы набрали {result} баллов на тестировании")
         student_main(message)
