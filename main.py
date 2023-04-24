@@ -64,6 +64,8 @@ def check(message):
             student_name = mycursor.fetchone()
             service = telebot.types.ReplyKeyboardMarkup(True, False)
             service.row('Мои результаты', 'Расписание')
+            mycursor.execute(f"UPDATE results SET teleid = {message.chat.id} WHERE email = %s",(semail,))
+            mydb.commit()
             msg = bot.send_message(message.chat.id, f'{student_name[0]}, вы спешно вошли', reply_markup = service)
             bot.register_next_step_handler(msg, student_main)
         else:
@@ -98,7 +100,7 @@ def student_main(message):
         result = mycursor.fetchone()
         img = 'sources/'+result[0]+'.png'
         bot.send_photo(message.chat.id, photo=open(img, 'rb'))
-        student_main(message)
+        start(message)
     if message.text == 'Мои результаты':
         mycursor.execute(f"SELECT score FROM results WHERE teleid = %s",(message.chat.id,))
         result = mycursor.fetchone()
